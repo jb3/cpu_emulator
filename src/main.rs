@@ -5,6 +5,7 @@ extern crate regex;
 use regex::Regex;
 
 use std::io;
+use std::io::Write;
 use std::env::args;
 use std::process::exit;
 
@@ -77,7 +78,9 @@ fn execute(memory: &mut memory::Memory) {
             InstructionType::Input => {
                 let mut inp = String::new();
 
-                println!("INPUT: ");
+                print!("INPUT: ");
+
+                io::stdout().flush().ok().expect("Could not flush stdout");
 
                 io::stdin()
                     .read_line(&mut inp)
