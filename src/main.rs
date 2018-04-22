@@ -86,7 +86,7 @@ fn execute(memory: &mut memory::Memory) {
                 let number = inp.trim().parse::<u64>().unwrap();
                 accumulator = number;
             }
-            InstructionType::Output => println!("{}", accumulator),
+            InstructionType::Output => println!("OUTPUT: {}", accumulator),
             InstructionType::Add => {
                 println!(
                     "Adding value at memory address {} to accumulator",
