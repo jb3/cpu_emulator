@@ -7,6 +7,7 @@ pub enum InstructionType {
     Input,
     Output,
     Halt,
+    Set,
 }
 
 #[derive(Debug)]

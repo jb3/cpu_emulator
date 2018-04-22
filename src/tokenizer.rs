@@ -52,6 +52,7 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
                 "STA" => 200,
                 "ADD" => 300,
                 "SUB" => 400,
+                "SET" => 800,
                 _ => 700,
             };
 

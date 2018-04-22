@@ -3,6 +3,8 @@ Simple CPU emulator written in Rust
 
 The instruction set implemented in this program is from [this page](http://teaching.idallen.com/dat2343/09f/notes/13lmc_opcodes.htm) (only difference is that STO is STA).
 
+There is an extra instruction called `SET` which will set the loaded memory address to something else.
+
 # Example programs
 
 ## Add two numbers

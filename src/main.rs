@@ -52,6 +52,8 @@ fn main() {
 fn execute(memory: &mut memory::Memory) {
     let mut accumulator = 0;
 
+    let mut last_addr = 0;
+
     for i in memory.items.clone() {
         if i == 0 {
             continue;
@@ -102,7 +104,15 @@ fn execute(memory: &mut memory::Memory) {
             InstructionType::Halt => {
                 break;
             }
+            InstructionType::Set => {
+                println!(
+                    "Setting contents of memory address {} to contents of memory address {}",
+                    last_addr, x.address
+                );
+                memory.items[(last_addr as usize) - 1] = memory.items[(x.address - 1) as usize];
+            }
         }
+        last_addr = x.address;
     }
 
     println!("Accumulator:       {}", accumulator);
@@ -155,6 +165,7 @@ fn parse(code: u64) -> Instruction {
         5 => InstructionType::Input,
         6 => InstructionType::Output,
         7 => InstructionType::Halt,
+        8 => InstructionType::Set,
         _ => panic!("Unexpected opcode: {}", op),
     };
 
