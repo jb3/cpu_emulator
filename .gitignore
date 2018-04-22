@@ -1,0 +1,6 @@
+/target
+**/*.rs.bk
+
+out.bin
+test.lmc
+.idea/
