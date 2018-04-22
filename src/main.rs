@@ -19,22 +19,32 @@ fn main() {
     let args = args().collect::<Vec<String>>();
     let mut mem = memory::Memory::new();
     if args.contains(&String::from("--compile")) {
-        let fi = args.get(
+        let source = args.get(
             args.binary_search(&String::from("--compile"))
-                .expect("You need to pass in a file if you specify --compile") + 1,
-        ).unwrap();
-        let codes = tokenizer::file_to_codes(&fi, &mut mem);
+                .expect("You need to pass in a source and an output if you specify --compile")
+                + 1,
+        ).expect("You need to pass in a source and an output if you specify --compile");
+        let bin = args.get(
+            args.binary_search(&String::from("--compile"))
+                .expect("You need to pass in a source and an output if you specify --compile")
+                + 2,
+        ).expect("You need to pass in a source and an output if you specify --compile");
+        let codes = tokenizer::file_to_codes(&source, &mut mem);
         for (i, v) in codes.into_iter().enumerate() {
             mem.items[i] = v;
         }
 
-        tokenizer::ops_to_bytes(mem);
+        tokenizer::ops_to_bytes(mem, &bin);
         println!("Success! Your code has been saved.");
         exit(0);
     }
 
     if args.contains(&String::from("--run")) {
-        let codes = tokenizer::bytes_to_ops();
+        let bin = args.get(
+            args.binary_search(&String::from("--run"))
+                .expect("You need to pass in a binary if you specify --run") + 1,
+        ).expect("You need to pass in a binary if you specify --run");
+        let codes = tokenizer::bytes_to_ops(bin);
         println!("Running compiled binary...");
 
         for (i, v) in codes.into_iter().enumerate() {
@@ -45,7 +55,7 @@ fn main() {
         exit(0);
     }
     println!(
-        "Joseph's CPU Emulator\n\n\tUsage: {} [--option] [file]\n\n\t\t--compile [file]        Compile the given file\n\t\t--run                   Run the compiled bin",
+        "Joseph's CPU Emulator\n\n\tUsage: {} [--option] [file]\n\n\t\t--compile [source] [output]    Compile the given file\n\t\t--run [file]                Run the compiled bin",
         args[0]
     );
 }

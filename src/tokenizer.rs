@@ -78,8 +78,8 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
     codes
 }
 
-pub fn ops_to_bytes(memory: memory::Memory) {
-    let mut f = File::create("out.bin").unwrap();
+pub fn ops_to_bytes(memory: memory::Memory, bin: &str) {
+    let mut f = File::create(bin).unwrap();
 
     let mut codes: Vec<u8> = Vec::new();
 
@@ -93,8 +93,8 @@ pub fn ops_to_bytes(memory: memory::Memory) {
     f.write(codes.as_slice()).expect("Could not write file");
 }
 
-pub fn bytes_to_ops() -> Vec<u64> {
-    let mut f = File::open("out.bin").expect("No instruction file found");
+pub fn bytes_to_ops(bin: &str) -> Vec<u64> {
+    let mut f = File::open(bin).expect("No instruction file found");
 
     let mut ops: Vec<u64> = Vec::new();
 
