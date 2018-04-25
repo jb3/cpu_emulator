@@ -22,14 +22,24 @@ The instruction set implemented in this program is from [this page](http://teach
 ### Add two numbers
 
 ```
-IN
-STA 40
-IN
-STA 41
+MAIN:
+CALL GETINPUTS
 
-LDA 40
-ADD 41
+GETINPUTS:
+IN
+STA 50
+IN
+STA 51
+CALL ADDNUMS
 
+ADDNUMS:
+LDA 50
+ADD 51
+STA 52
+CALL PRINTOUT
+
+PRINTOUT:
+LDA 52
 OUT
 HLT
 ```
@@ -37,16 +47,38 @@ HLT
 ### Subtract one number from another
 
 ```
-IN
-STA 40
-IN
-STA 41
+MAIN:
+CALL GETINPUTS
 
-LDA 40
-SUB 41
+GETINPUTS:
+IN
+STA 50
+IN
+STA 51
+CALL SUBTRACT
 
+SUBTRACT:
+LDA 50
+SUB 51
+STA 52
+CALL PRINTOUT
+
+PRINTOUT:
+LDA 52
 OUT
 HLT
+```
+
+### Infinite get input & print loop
+
+```
+MAIN:
+CALL LOOP
+
+LOOP:
+IN
+OUT
+CALL LOOP
 ```
 
 ## Execution

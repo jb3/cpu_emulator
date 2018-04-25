@@ -13,16 +13,24 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
     let data_declaration = Regex::new(r"([0-9]+) DAT ([0-9]+)").unwrap();
     let label_declaration = Regex::new(r"([A-Za-z]+):").unwrap();
     let call_declaration = Regex::new(r"CALL ([A-Z]+)").unwrap();
+    let ret = Regex::new(r"RET").unwrap();
     let mut labels: HashMap<String, u64> = HashMap::new();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
     let mut ln = 0;
+    let mut call_positions: Vec<(&str, u64)> = Vec::new();
+
+    let mut call_loc = 0;
 
     for line in contents.split("\n") {
-        println!("{}", line);
-        println!("{:?}", labels);
         let mut valid = false;
+
+        let ret_match = ret.captures(line);
+
+        if !ret_match.is_none() {
+            codes.push(900 + call_loc + 1);
+        }
 
         let label_captures = label_declaration.captures(line);
         if !label_captures.is_none() {
@@ -35,11 +43,11 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
 
         let call_captures = call_declaration.captures(line);
         if !call_captures.is_none() {
-            let lbl = String::from(call_captures.unwrap().get(1).unwrap().as_str());
-            match labels.get(&lbl) {
-                Some(position) => codes.push(900 + position),
-                None => panic!("Call requested to a label which was not found ({})", lbl),
-            }
+            call_loc = ln;
+            let lbl = call_captures.unwrap().get(1).unwrap().as_str();
+            call_positions.push((lbl, ln));
+            codes.push(0);
+            ln += 1;
             continue;
         }
 
@@ -106,6 +114,9 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
         }
     }
 
+    for (label, index) in call_positions {
+        codes[index as usize] = 900 + *labels.get(label).unwrap();
+    }
     (codes)
 }
 
