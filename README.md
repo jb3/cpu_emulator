@@ -82,6 +82,21 @@ LOOP:
 	CALL LOOP
 ```
 
+### Pre-defining data
+
+```
+MAIN:
+	LDA 50
+	ADD 51
+	OUT
+	HLT
+
+50 DAT 10
+51 DAT 11
+```
+
+The above code means that at address 50, the number 10 will be stored, and at address 51, the number 11 will be stored. Upon execution 50 will be loaded into the accumulator, 51 will then be added to the accumulator and the accumulator will be outputted. Followed by a halt instruction.
+
 ## Execution
 
 1) Build the binaries
