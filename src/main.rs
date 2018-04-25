@@ -34,7 +34,7 @@ fn main() {
             mem.items[i] = v;
         }
 
-        tokenizer::ops_to_bytes(mem, &bin);
+        tokenizer::ops_to_bytes(&mem, &bin);
         println!("Success! Your code has been saved.");
         exit(0);
     }

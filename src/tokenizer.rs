@@ -2,22 +2,46 @@ use regex::Regex;
 use std::fs::File;
 use std::io::prelude::*;
 use memory;
+use std::collections::HashMap;
 
 pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
     let mut file = File::open(path).unwrap();
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).unwrap();
-
-    let z = contents.split("\n");
-
     let mut codes = Vec::new();
 
     let instruction_re = Regex::new(r"([A-Z]+)$").unwrap();
     let instruction_with_arg_re = Regex::new(r"([A-Z]+) ([A-Za-z0-9]+)").unwrap();
     let data_declaration = Regex::new(r"([0-9]+) DAT ([0-9]+)").unwrap();
+    let label_declaration = Regex::new(r"([A-Za-z]+):").unwrap();
+    let call_declaration = Regex::new(r"CALL ([A-Z]+)").unwrap();
+    let mut labels: HashMap<String, u64> = HashMap::new();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
 
-    for line in z {
+    let mut ln = 0;
+
+    for line in contents.split("\n") {
+        println!("{}", line);
+        println!("{:?}", labels);
         let mut valid = false;
+
+        let label_captures = label_declaration.captures(line);
+        if !label_captures.is_none() {
+            labels.insert(
+                String::from(label_captures.unwrap().get(1).unwrap().as_str()),
+                ln,
+            );
+            continue;
+        }
+
+        let call_captures = call_declaration.captures(line);
+        if !call_captures.is_none() {
+            let lbl = String::from(call_captures.unwrap().get(1).unwrap().as_str());
+            match labels.get(&lbl) {
+                Some(position) => codes.push(900 + position),
+                None => panic!("Call requested to a label which was not found ({})", lbl),
+            }
+            continue;
+        }
 
         let w = data_declaration.captures(line);
         if !w.is_none() {
@@ -25,7 +49,9 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
             let address = mat.get(1).unwrap().as_str().parse::<u64>().unwrap();
             let data = mat.get(2).unwrap().as_str().parse::<u64>().unwrap();
 
-            memory.items[(address - 1) as usize] = data;
+            memory.items[address as usize] = data;
+
+            ln -= 1;
 
             continue;
         }
@@ -68,6 +94,10 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
             codes.push(finish);
         }
 
+        if valid {
+            ln += 1;
+        }
+
         if !valid {
             if line == "" {
                 continue;
@@ -76,15 +106,15 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
         }
     }
 
-    codes
+    (codes)
 }
 
-pub fn ops_to_bytes(memory: memory::Memory, bin: &str) {
+pub fn ops_to_bytes(memory: &memory::Memory, bin: &str) {
     let mut f = File::create(bin).unwrap();
 
     let mut codes: Vec<u8> = Vec::new();
 
-    for code in memory.items {
+    for code in &memory.items {
         let code_string = format!("{:03}", code);
         let co = code_string.as_str().chars();
         for c in co {
