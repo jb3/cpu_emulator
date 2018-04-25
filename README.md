@@ -5,17 +5,18 @@ The instruction set implemented in this program is from [this page](http://teach
 
 ## Instruction list
 
-| Name     | Code     | Opcode | Usage                                                    |
-|----------|----------|--------|----------------------------------------------------------|
-| Load     | `LDA XY` | 1XY    | Load the memory address of XY into the accumulator       |
-| Store    | `STA XY` | 2XY    | Store accumulator value in memory address XY             |
-| Add      | `ADD XY` | 3XY    | Add value of memory address XY to accumulator            |
-| Subtract | `SUB XY` | 4XY    | Subtract the value of memory address XY from accumulator |
-| Input    | `IN`     | 500    | Take user input and store in accumulator                 |
-| Output   | `OUT`    | 600    | Write value of accumulator to shell                      |
-| Halt     | `HLT`    | 700    | Halt execution of the program                            |
-| Set      | `SET XY` | 8XY    | Set the accumulator to memory address XY                 |
-| Jump     | `JMP XY` | 9XY    | Change the program counter to memory address XY          |
+| Name     | Code         | Opcode | Usage                                                                        |
+|----------|--------------|--------|------------------------------------------------------------------------------|
+| Load     | `LDA XY`     | 1XY    | Load the memory address of XY into the accumulator                           |
+| Store    | `STA XY`     | 2XY    | Store accumulator value in memory address XY                                 |
+| Add      | `ADD XY`     | 3XY    | Add value of memory address XY to accumulator                                |
+| Subtract | `SUB XY`     | 4XY    | Subtract the value of memory address XY from accumulator                     |
+| Input    | `IN`         | 500    | Take user input and store in accumulator                                     |
+| Output   | `OUT`        | 600    | Write value of accumulator to shell                                          |
+| Halt     | `HLT`        | 700    | Halt execution of the program                                                |
+| Set      | `SET XY`     | 8XY    | Set the accumulator to memory address XY                                     |
+| Jump     | `JMP XY`     | 9XY    | Change the program counter to memory address XY                              |
+| Call     | `CALL LABEL` | N/A    | This instruction internally changes into a `JMP XY` call to jump to a label. |
 
 ## Example programs
 
