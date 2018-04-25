@@ -55,7 +55,7 @@ fn main() {
         exit(0);
     }
     println!(
-        "Joseph's CPU Emulator\n\n\tUsage: {} [--option] [file]\n\n\t\t--compile [source] [output]    Compile the given file\n\t\t--run [file]                Run the compiled bin",
+        "Joseph's CPU Emulator\n\n\tUsage: {} [--option] [file]\n\n\t\t--compile [source] [output]    Compile the given file\n\t\t--run [file]                   Run the compiled bin",
         args[0]
     );
 }
@@ -65,11 +65,16 @@ fn execute(memory: &mut memory::Memory) {
 
     let mut last_addr = 0;
 
-    for i in memory.items.clone() {
+    let mut program_counter: u64 = 0;
+
+    loop {
+        let i = memory.items[program_counter as usize];
         if i == 0 {
+            program_counter += 1;
             continue;
         }
         let x = parse(i);
+        let mut jumped = false;
         match x.kind {
             InstructionType::Load => {
                 println!(
@@ -124,11 +129,20 @@ fn execute(memory: &mut memory::Memory) {
                 );
                 memory.items[(last_addr as usize) - 1] = memory.items[(x.address - 1) as usize];
             }
+            InstructionType::Jump => {
+                println!("Setting program counter to {}", x.address);
+                program_counter = x.address;
+                jumped = true;
+            }
         }
         last_addr = x.address;
+        if !jumped {
+            program_counter += 1;
+        }
     }
 
     println!("Accumulator:       {}", accumulator);
+    println!("Program Counter:   {}", program_counter);
     println!("Memory table: ");
     println!("╭─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────╮");
     let mem_slice = memory.items.as_slice();
@@ -179,6 +193,7 @@ fn parse(code: u64) -> Instruction {
         6 => InstructionType::Output,
         7 => InstructionType::Halt,
         8 => InstructionType::Set,
+        9 => InstructionType::Jump,
         _ => panic!("Unexpected opcode: {}", op),
     };
 

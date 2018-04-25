@@ -8,6 +8,7 @@ pub enum InstructionType {
     Output,
     Halt,
     Set,
+    Jump,
 }
 
 #[derive(Debug)]
