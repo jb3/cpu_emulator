@@ -20,6 +20,7 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
 
     let mut ln = 0;
     let mut call_positions: Vec<(&str, u64)> = Vec::new();
+    let mut data_decs: Vec<(u64, u64)> = Vec::new();
 
     let mut call_loc = 0;
 
@@ -27,6 +28,19 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
         let mut valid = false;
 
         let ret_match = ret.captures(line);
+
+        let w = data_declaration.captures(line);
+        if !w.is_none() {
+            let mat = w.unwrap();
+            let address = mat.get(1).unwrap().as_str().parse::<u64>().unwrap();
+            let data = mat.get(2).unwrap().as_str().parse::<u64>().unwrap();
+
+            data_decs.push((address, data));
+
+            ln -= 1;
+
+            continue;
+        }
 
         if !ret_match.is_none() {
             codes.push(900 + call_loc + 1);
@@ -48,19 +62,6 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
             call_positions.push((lbl, ln));
             codes.push(0);
             ln += 1;
-            continue;
-        }
-
-        let w = data_declaration.captures(line);
-        if !w.is_none() {
-            let mat = w.unwrap();
-            let address = mat.get(1).unwrap().as_str().parse::<u64>().unwrap();
-            let data = mat.get(2).unwrap().as_str().parse::<u64>().unwrap();
-
-            memory.items[address as usize] = data;
-
-            ln -= 1;
-
             continue;
         }
 
@@ -117,6 +118,10 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
     for (label, index) in call_positions {
         codes[index as usize] = 900 + *labels.get(label).unwrap();
     }
+
+    for (index, data) in data_decs {
+        memory.items[index as usize] = data;
+    }
     (codes)
 }
 
@@ -140,7 +145,7 @@ pub fn bytes_to_ops(bin: &str) -> Vec<u64> {
 
     let mut ops: Vec<u64> = Vec::new();
 
-    let mut buf: &mut [u8] = &mut [0; 100];
+    let mut buf: &mut [u8] = &mut [0; 300];
 
     f.read(&mut buf).expect("Could not read file");
 
