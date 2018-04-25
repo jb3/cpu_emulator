@@ -77,18 +77,15 @@ fn execute(memory: &mut memory::Memory) {
         let mut jumped = false;
         match x.kind {
             InstructionType::Load => {
-                println!(
-                    "Loading value at address {} into accumulator",
-                    x.address - 1
-                );
-                accumulator = memory.items[(x.address as usize) - 1];
+                println!("Loading value at address {} into accumulator", x.address);
+                accumulator = memory.items[x.address as usize];
             }
             InstructionType::Store => {
                 println!(
                     "Storing value from accumulator in memory address {}",
-                    x.address - 1
+                    x.address
                 );
-                memory.items[(x.address as usize) - 1] = accumulator;
+                memory.items[x.address as usize] = accumulator;
             }
             InstructionType::Input => {
                 let mut inp = String::new();
@@ -108,16 +105,16 @@ fn execute(memory: &mut memory::Memory) {
             InstructionType::Add => {
                 println!(
                     "Adding value at memory address {} to accumulator",
-                    x.address - 1
+                    x.address
                 );
-                accumulator += memory.items[(x.address as usize) - 1];
+                accumulator += memory.items[x.address as usize];
             }
             InstructionType::Subtract => {
                 println!(
                     "Subtracting value at memory address {} from accumulator",
-                    x.address - 1
+                    x.address
                 );
-                accumulator -= memory.items[(x.address as usize) - 1];
+                accumulator -= memory.items[x.address as usize];
             }
             InstructionType::Halt => {
                 break;
@@ -127,7 +124,7 @@ fn execute(memory: &mut memory::Memory) {
                     "Setting contents of memory address {} to contents of memory address {}",
                     last_addr, x.address
                 );
-                memory.items[(last_addr as usize) - 1] = memory.items[(x.address - 1) as usize];
+                memory.items[last_addr as usize] = memory.items[x.address as usize];
             }
             InstructionType::Jump => {
                 println!("Setting program counter to {}", x.address);
