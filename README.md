@@ -3,11 +3,23 @@ Simple CPU emulator written in Rust
 
 The instruction set implemented in this program is from [this page](http://teaching.idallen.com/dat2343/09f/notes/13lmc_opcodes.htm) (only difference is that STO is STA).
 
-There is an extra instruction called `SET` which will set the loaded memory address to something else.
+## Instruction list
 
-# Example programs
+| Name     | Code     | Opcode | Usage                                                    |
+|----------|----------|--------|----------------------------------------------------------|
+| Load     | `LDA XY` | 1XY    | Load the memory address of XY into the accumulator       |
+| Store    | `STA XY` | 2XY    | Store accumulator value in memory address XY             |
+| Add      | `ADD XY` | 3XY    | Add value of memory address XY to accumulator            |
+| Subtract | `SUB XY` | 4XY    | Subtract the value of memory address XY from accumulator |
+| Input    | `IN`     | 500    | Take user input and store in accumulator                 |
+| Output   | `OUT`    | 600    | Write value of accumulator to shell                      |
+| Halt     | `HLT`    | 700    | Halt execution of the program                            |
+| Set      | `SET XY` | 8XY    | Set the accumulator to memory address XY                 |
+| Jump     | `JMP XY` | 9XY    | Change the program counter to memory address XY          |
 
-## Add two numbers
+## Example programs
+
+### Add two numbers
 
 ```
 IN
@@ -22,7 +34,7 @@ OUT
 HLT
 ```
 
-## Subtract one number from another
+### Subtract one number from another
 
 ```
 IN
