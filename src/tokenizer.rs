@@ -8,12 +8,12 @@ pub fn file_to_codes(path: &str, memory: &mut memory::Memory) -> Vec<u64> {
     let mut file = File::open(path).unwrap();
     let mut codes = Vec::new();
 
-    let instruction_re = Regex::new(r"([A-Z]+)$").unwrap();
-    let instruction_with_arg_re = Regex::new(r"([A-Z]+) ([A-Za-z0-9]+)").unwrap();
+    let instruction_re = Regex::new(r"[\s\t]+?([A-Z]+)$").unwrap();
+    let instruction_with_arg_re = Regex::new(r"[\s\t]+?([A-Z]+) ([A-Za-z0-9]+)").unwrap();
     let data_declaration = Regex::new(r"([0-9]+) DAT ([0-9]+)").unwrap();
     let label_declaration = Regex::new(r"([A-Za-z]+):").unwrap();
     let call_declaration = Regex::new(r"CALL ([A-Z]+)").unwrap();
-    let ret = Regex::new(r"RET").unwrap();
+    let ret = Regex::new(r"[\s\t]+?RET").unwrap();
     let mut labels: HashMap<String, u64> = HashMap::new();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
