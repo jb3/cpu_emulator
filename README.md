@@ -85,5 +85,5 @@ CALL LOOP
 ## Execution
 
 1) Build the binaries
-2) `./path/to/binary --compile source.file`
-3) `./path/to/binary --run`
+2) `./path/to/binary --compile source.file target.file`
+3) `./path/to/binary --run target.file`
