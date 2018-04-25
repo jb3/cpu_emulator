@@ -5,7 +5,7 @@ The instruction set implemented in this program is from [this page](http://teach
 
 ## Instruction list
 
-| Name     | Code         | Opcode | Usage                                                                        |
+| Name     | Code         | Opcode | Definition                                                                   |
 |----------|--------------|--------|------------------------------------------------------------------------------|
 | Load     | `LDA XY`     | 1XY    | Load the memory address of XY into the accumulator                           |
 | Store    | `STA XY`     | 2XY    | Store accumulator value in memory address XY                                 |
