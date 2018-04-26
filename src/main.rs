@@ -68,6 +68,11 @@ fn execute(memory: &mut memory::Memory) {
     let mut program_counter: u64 = 0;
 
     loop {
+        if program_counter > 99 {
+            println!("End of memory reached. Exiting.");
+            exit(0);
+        }
+
         let i = memory.items[program_counter as usize];
         if i == 0 {
             program_counter += 1;
@@ -92,7 +97,7 @@ fn execute(memory: &mut memory::Memory) {
 
                 print!("INPUT: ");
 
-                io::stdout().flush().ok().expect("Could not flush stdout");
+                io::stdout().flush().ok();
 
                 io::stdin()
                     .read_line(&mut inp)
