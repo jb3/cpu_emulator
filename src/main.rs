@@ -170,7 +170,7 @@ fn execute(memory: &mut memory::Memory) {
 }
 
 fn parse(code: u64) -> Instruction {
-    let code_string = format!("{}", code);
+    let code_string = format!("{:03}", code);
     let code_string = code_string.as_str();
 
     if code_string.len() > 3 {
