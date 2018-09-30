@@ -14,7 +14,7 @@ The instruction set implemented in this program is from [this page](http://teach
 | Input    | `IN`         | 500    | Take user input and store in accumulator                                     |
 | Output   | `OUT`        | 600    | Write value of accumulator to shell                                          |
 | Halt     | `HLT`        | 700    | Halt execution of the program                                                |
-| Set      | `SET XY`     | 8XY    | Set the accumulator to memory address XY                                     |
+| Set      | `SET XY`     | 8XY    | Set the loaded memory address (loaded via LDA) to the memory address of XY   |
 | Jump     | `JMP XY`     | 9XY    | Change the program counter to memory address XY                              |
 | Call     | `CALL LABEL` | N/A    | This instruction internally changes into a `JMP XY` call to jump to a label. |
 
