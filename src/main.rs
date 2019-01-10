@@ -1,5 +1,3 @@
-#![feature(exact_chunks)]
-
 extern crate regex;
 
 use regex::Regex;

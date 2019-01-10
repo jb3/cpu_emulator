@@ -149,7 +149,7 @@ pub fn bytes_to_ops(bin: &str) -> Vec<u64> {
 
     f.read(&mut buf).expect("Could not read file");
 
-    let chnk = buf.exact_chunks(3);
+    let chnk = buf.chunks_exact(3);
 
     for c in chnk {
         ops.push(format!("{}{}{}", c[0], c[1], c[2]).parse::<u64>().unwrap());
